@@ -16,8 +16,16 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pusher
 
-app = Flask(__name__)
+# Configure Flask to serve static files from the project root directory
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+app = Flask(__name__, static_folder=project_root, static_url_path='')
 CORS(app)
+
+from flask import send_from_directory
+
+@app.route('/')
+def serve_index():
+    return send_from_directory(project_root, 'index.html')
 
 # Credentials
 YOUTUBE_API_KEY = os.environ.get('YOUTUBE_API_KEY')
